@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connect to Flask API</title>
+    <title>HWAI Bot</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* HealthWorksAI fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f9;
@@ -18,129 +21,144 @@
             height: 100vh;
             color: #333;
         }
+
         h1 {
             margin-bottom: 20px;
-            font-size: 24px;
-            color: #4A90E2;
+            font-size: 28px;
+            color: #1E90FF;
         }
+
         .container {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             text-align: center;
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
         }
+
         .form-group {
             margin-bottom: 15px;
             text-align: left;
         }
+
         .form-group label {
-            display: block;
             font-size: 14px;
+            font-weight: 500;
             margin-bottom: 5px;
+            display: block;
         }
+
         .form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 14px;
         }
+
         .btn {
-            background-color: #4A90E2;
+            background-color: #1E90FF;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 10px;
+            margin-top: 15px;
             transition: background-color 0.3s ease;
         }
+
         .btn:hover {
-            background-color: #357ABD;
+            background-color: #0056b3;
         }
+
         .spinner {
             display: none;
-            margin-top: 10px;
+            margin-top: 15px;
+        }
+
+        .response-card {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e7f3ff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            color: #1a3b5d;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Connect to Flask API</h1>
+        <h1>HWAI Bot</h1>
+        <p>Enter your query below to interact with the HealthWorks Query system.</p>
         <div class="form-group">
-            <label for="queryInput">Enter your query:</label>
+            <label for="queryInput">Your Query:</label>
             <input type="text" id="queryInput" placeholder="e.g., What is the purpose of the AEP Disruption Report?" />
         </div>
         <button class="btn" onclick="submitQuery()">
-            <i class="fas fa-download"></i> Get Data
+            <i class="fas fa-search"></i> Submit Query
         </button>
         <div class="spinner">
-            <i class="fas fa-circle-notch fa-spin"></i> Fetching data...
+            <i class="fas fa-circle-notch fa-spin"></i> Processing your query...
         </div>
+        <div id="responseContainer"></div>
     </div>
 
-    <script src="https://connectors.tableau.com/libs/tableauwdc-2.3.latest.js"></script>
     <script>
-        (function () {
-            var myConnector = tableau.makeConnector();
-
-            // Define the schema
-            myConnector.getSchema = function (schemaCallback) {
-                var cols = [
-                    { id: "response", alias: "Response", dataType: tableau.dataTypeEnum.string }
-                ];
-
-                var tableSchema = {
-                    id: "FlaskAPIResponse",
-                    alias: "Response from Flask API",
-                    columns: cols
-                };
-
-                schemaCallback([tableSchema]);
-            };
-
-            // Define how to fetch the data
-            myConnector.getData = function (table, doneCallback) {
-                var queryInput = document.getElementById('queryInput').value; // Get user input
-                if (!queryInput) {
-                    tableau.abortWithError("Query input cannot be empty.");
-                    return;
-                }
-
-                document.querySelector('.spinner').style.display = 'block'; // Show spinner
-
-                fetch("https://9acf-103-174-80-9.ngrok-free.app/query", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ query: queryInput })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        var tableData = [{ response: data.response }];
-
-                        table.appendRows(tableData);
-                        doneCallback();
-                        document.querySelector('.spinner').style.display = 'none'; // Hide spinner
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        tableau.abortWithError("Error fetching data from Flask API.");
-                        document.querySelector('.spinner').style.display = 'none'; // Hide spinner
-                    });
-            };
-
-            tableau.registerConnector(myConnector);
-        })();
-
         function submitQuery() {
-            tableau.connectionName = "Flask API Data";
-            tableau.submit();
+            const queryInput = document.getElementById('queryInput').value;
+            const responseContainer = document.getElementById('responseContainer');
+            const spinner = document.querySelector('.spinner');
+
+            if (!queryInput.trim()) {
+                alert('Please enter a query before submitting.');
+                return;
+            }
+
+            spinner.style.display = 'block'; // Show spinner
+            responseContainer.innerHTML = ''; // Clear previous response
+
+            fetch("https://9acf-103-174-80-9.ngrok-free.app/query", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ query: queryInput })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    spinner.style.display = 'none'; // Hide spinner
+
+                    if (data.response) {
+                        // Create a card to display the response
+                        responseContainer.innerHTML = `
+                            <div class="response-card">
+                                <strong>Response:</strong>
+                                <p>${data.response}</p>
+                            </div>
+                        `;
+                    } else {
+                        responseContainer.innerHTML = `
+                            <div class="response-card">
+                                <strong>Error:</strong>
+                                <p>No response received from the server.</p>
+                            </div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    spinner.style.display = 'none'; // Hide spinner
+                    console.error("Error:", error);
+                    responseContainer.innerHTML = `
+                        <div class="response-card">
+                            <strong>Error:</strong>
+                            <p>Unable to fetch data. Please try again later.</p>
+                        </div>
+                    `;
+                });
         }
     </script>
 </body>
