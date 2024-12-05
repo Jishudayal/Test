@@ -13,26 +13,31 @@
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f7fa;
+            background-color: #f9fafb; /* Subtle off-white background */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            color: #4A5CE2; /* Blue with a hint of purple */
+            min-height: 100vh;
+            color: #333; /* Neutral dark color for text */
         }
 
         h1 {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-size: 28px;
-            color: #4A5CE2; /* Blue-purple tone */
+            color: #0066cc; /* Clean blue */
+        }
+
+        p {
+            color: #666; /* Subtle grey for descriptions */
+            margin-bottom: 20px;
         }
 
         .container {
-            background: white;
+            background: #fff; /* Pure white card */
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 90%;
             max-width: 500px;
@@ -48,6 +53,7 @@
             font-weight: 500;
             margin-bottom: 5px;
             display: block;
+            color: #333;
         }
 
         .form-group input {
@@ -59,7 +65,7 @@
         }
 
         .btn {
-            background-color: #4A5CE2; /* Blue-purple tone */
+            background: linear-gradient(to right, #0066cc, #0099ff); /* Gradient blue */
             color: white;
             border: none;
             padding: 12px 20px;
@@ -67,11 +73,12 @@
             cursor: pointer;
             font-size: 16px;
             margin-top: 15px;
-            transition: background-color 0.3s ease;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
 
         .btn:hover {
-            background-color: #3A4CB3; /* Darker blue-purple tone */
+            background: linear-gradient(to right, #005bb5, #007acc); /* Darker gradient */
+            transform: translateY(-2px);
         }
 
         .spinner {
@@ -82,24 +89,24 @@
         .response-card {
             margin-top: 20px;
             padding: 15px;
-            background: #EEF3FF; /* Light bluish-purple tone */
+            background: #f0f4f8; /* Light bluish-grey */
             border-radius: 8px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             text-align: left;
-            color: #4A5CE2;
             position: relative;
         }
 
         .response-card img {
-            width: 60px;
+            width: 50px;
             height: auto;
             position: absolute;
             top: 10px;
             right: 10px;
+            border-radius: 5px; /* Subtle rounded corners */
         }
 
         .response-card strong {
-            color: #4A5CE2;
+            color: #0066cc; /* Clean blue for emphasis */
         }
     </style>
 </head>
@@ -149,7 +156,7 @@
                         // Create a card to display the response
                         responseContainer.innerHTML = `
                             <div class="response-card">
-                                <img src="./HWAI_Logo.png" alt="HWAI Logo">
+                                <img src="HWAI_Logo.png" alt="HWAI Logo" onerror="this.style.display='none'">
                                 <strong>Response:</strong>
                                 <p>${data.response}</p>
                             </div>
@@ -157,7 +164,7 @@
                     } else {
                         responseContainer.innerHTML = `
                             <div class="response-card">
-                                <img src="./HWAI_Logo.png" alt="HWAI Logo">
+                                <img src="HWAI_Logo.png" alt="HWAI Logo" onerror="this.style.display='none'">
                                 <strong>Error:</strong>
                                 <p>No response received from the server.</p>
                             </div>
@@ -169,7 +176,7 @@
                     console.error("Error:", error);
                     responseContainer.innerHTML = `
                         <div class="response-card">
-                            <img src="./HWAI_Logo.png" alt="HWAI Logo">
+                            <img src="HWAI_Logo.png" alt="HWAI Logo" onerror="this.style.display='none'">
                             <strong>Error:</strong>
                             <p>Unable to fetch data. Please try again later.</p>
                         </div>
