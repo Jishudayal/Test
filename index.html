@@ -13,19 +13,19 @@
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background-color: #f9f7fc;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            color: #333;
+            color: #4A154B; /* Matches logo's purple tone */
         }
 
         h1 {
             margin-bottom: 20px;
             font-size: 28px;
-            color: #1E90FF;
+            color: #E84A70; /* Matches logo's pinkish-red tone */
         }
 
         .container {
@@ -53,13 +53,13 @@
         .form-group input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
         }
 
         .btn {
-            background-color: #1E90FF;
+            background-color: #E84A70; /* Matches logo's pinkish-red tone */
             color: white;
             border: none;
             padding: 12px 20px;
@@ -71,7 +71,7 @@
         }
 
         .btn:hover {
-            background-color: #0056b3;
+            background-color: #C63D5C;
         }
 
         .spinner {
@@ -82,11 +82,24 @@
         .response-card {
             margin-top: 20px;
             padding: 15px;
-            background: #e7f3ff;
+            background: #fbe4eb; /* Light pinkish background */
             border-radius: 8px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             text-align: left;
-            color: #1a3b5d;
+            color: #4A154B;
+            position: relative;
+        }
+
+        .response-card img {
+            width: 60px;
+            height: auto;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .response-card strong {
+            color: #E84A70;
         }
     </style>
 </head>
@@ -136,6 +149,7 @@
                         // Create a card to display the response
                         responseContainer.innerHTML = `
                             <div class="response-card">
+                                <img src="./HWAI_Logo.png" alt="HWAI Logo">
                                 <strong>Response:</strong>
                                 <p>${data.response}</p>
                             </div>
@@ -143,6 +157,7 @@
                     } else {
                         responseContainer.innerHTML = `
                             <div class="response-card">
+                                <img src="./HWAI_Logo.png" alt="HWAI Logo">
                                 <strong>Error:</strong>
                                 <p>No response received from the server.</p>
                             </div>
@@ -154,6 +169,7 @@
                     console.error("Error:", error);
                     responseContainer.innerHTML = `
                         <div class="response-card">
+                            <img src="./HWAI_Logo.png" alt="HWAI Logo">
                             <strong>Error:</strong>
                             <p>Unable to fetch data. Please try again later.</p>
                         </div>
